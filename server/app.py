@@ -52,6 +52,16 @@ class Comments(Resource):
 
 api.add_resource(Comments, '/api/v1/comments')
 
+class CommentsById(Resource):
+    def delete(self,id):
+        comment = Comment.query.get(id)
+        if not comment:
+            return make_response({'error':'comment not found'}, 404)
+        db.session.delete(comment)
+        db.session.commit()
+        return make_response('deleted comment successfully', 204)
+api.add_resource(CommentsById, '/api/v1/comments/<int:id>')
+
 class Favorites(Resource):
     def get(self):
         favorites = [favorite.to_dict() for favorite in Favorite.query.all()]

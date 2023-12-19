@@ -4,6 +4,7 @@ import CommentForm from "./CommentForm";
 
 function Comments({user, workout_id}) {
     const [comments, setComments] = useState([])
+    const [activeComment, setActiveComment] = useState(null)
 
     const workoutComments = comments.filter((comment) => comment.workout_id === workout_id)
 
@@ -40,8 +41,27 @@ function Comments({user, workout_id}) {
             return response.json();
         }).then(comment => {
             setComments([comment, ...comments])
+            setActiveComment(null)
         })
     }
+    const deleteComment = (commentId) => {
+        const url = `/comments/${commentId}`
+        if (window.confirm('Are you sure you want to delete this comment?')) {
+            fetch(url, {
+                method:'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({}),
+
+            }).then((resp) => {
+                if (resp.ok) {
+                    const updatedComments = comments.filter(comment => comment.id !== commentId);
+                    setComments(updatedComments);
+                }
+            })
+        }
+        }
 
 
      useEffect(getComments, [])
@@ -56,29 +76,19 @@ function Comments({user, workout_id}) {
             <CommentForm submitLabel="Write" handleSubmit={addComment}/>
             <div className="comments-container">
                 {rootComments.map((rootComment) => (
-                    <Comment key={rootComment.id} comment={rootComment} replies={getReplies(rootComment.id)} currentUserId = {user.id}/>
+                    <Comment 
+                    key={rootComment.id} 
+                    comment={rootComment} 
+                    replies={getReplies(rootComment.id)} 
+                    currentUserId = {user.id}
+                    deleteComment={deleteComment}
+                    activeComment={activeComment}
+                    setActiveComment={setActiveComment}
+                    addComment={addComment}
+                    />
                 ))}
             </div>
         </div>
     )
 }
 export default Comments;
-
-
-
-// const newComment = (text, parentId) => {
-    //     fetch("/comments", {
-    //         method:'POST',
-    //         headers: {'Content-Type' : 'application/json'},
-    //         body: JSON.stringify({
-    //             comment: text,
-    //             parentId: parentId
-    //         }),
-
-    //     }).then(response => {
-    //         if (!response.ok) {
-    //             throw new Error(`POST error! Status : ${response.status}`)
-    //         }
-    //         return response.json();
-    //     })
-    // }

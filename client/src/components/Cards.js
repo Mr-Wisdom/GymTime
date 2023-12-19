@@ -27,7 +27,7 @@ const ExpandMore = styled((props) => {
     }),
   }));
 
-function Cards({image, workout_details, workout_difficulty, workout_type, workout_category, workout_likes, workout_name}) {
+function Cards({image, workout_details, workout_difficulty, workout_type, workout_category, workout_likes, workout_name, workout_id}) {
     const [expanded, setExpanded] = useState(false);
 
     const handleExpandClick = () => {
@@ -76,7 +76,7 @@ function Cards({image, workout_details, workout_difficulty, workout_type, workou
                     <Typography paragraph>
                         to be comments soon...!
                     </Typography>
-                    <Comments user = {user}/>
+                    <Comments user = {user} workout_id={workout_id}/>
                  </CardContent>
                 </Collapse>
             </Card>

@@ -62,6 +62,33 @@ function Comments({user, workout_id}) {
             })
         }
         }
+    const updateComment = (text, commentId) => {
+        const url = `/comments/${commentId}`
+        fetch(url, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type" : "application/json",
+            },
+            body: JSON.stringify({
+                comment: text,
+                // parentId: parentId = null,
+                username : user.username,
+                user_id: user.id,
+                workout_id: workout_id
+            }),
+        }).then((resp) => {
+            if (resp.ok) {
+                const updatedComments = comments.map(comment => {
+                    if (comment.id === commentId) {
+                        return {...comment, comment: text};
+                    }
+                    return comment
+                })
+                setComments(updatedComments)
+                setActiveComment(null)
+            }
+        })
+    }
 
 
      useEffect(getComments, [])
@@ -85,6 +112,7 @@ function Comments({user, workout_id}) {
                     activeComment={activeComment}
                     setActiveComment={setActiveComment}
                     addComment={addComment}
+                    updateComment={updateComment}
                     />
                 ))}
             </div>

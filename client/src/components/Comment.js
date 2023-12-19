@@ -1,7 +1,7 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import IconButton from '@mui/material/IconButton';
 import CommentForm from './CommentForm';
-function Comment({comment, replies , currentUserId, deleteComment, activeComment, setActiveComment, parentId = null, addComment}) {
+function Comment({comment, replies , currentUserId, deleteComment, activeComment, setActiveComment, parentId = null, addComment, updateComment}) {
     const canReply = Boolean(currentUserId)
     const canEdit = currentUserId === comment.user_id
     const canDelete = currentUserId === comment.user_id
@@ -22,7 +22,16 @@ function Comment({comment, replies , currentUserId, deleteComment, activeComment
                     <div className="comment-author">{comment.username}</div>
                     <div>{createdAt}</div>
                 </div>
-                <div className="comment-text">{comment.comment}</div>
+                {!isEditing &&<div className="comment-text">{comment.comment}</div>}
+                {isEditing && (
+                    <CommentForm 
+                    submitLabel="Update" 
+                    hasCancelButton 
+                    initialText = {comment.comment} 
+                    handleSubmit={(text) => updateComment(text, comment.id)} 
+                    handleCancel={() => setActiveComment(null)}
+                    />
+                )}
                 <div className="comment-actions">
                     {canReply &&<div className="comment-action " onClick={() => setActiveComment({id: comment.id, type:"replying"})}>Reply</div>}
                     {canEdit &&<div className="comment-action " onClick={() => setActiveComment({id: comment.id, type:"editing"})}>Edit</div>}
@@ -46,6 +55,7 @@ function Comment({comment, replies , currentUserId, deleteComment, activeComment
                             addComment={addComment}
                             activeComment={activeComment}
                             setActiveComment={setActiveComment}
+                            updateComment={updateComment}
                             />
                         })}
                     </div>

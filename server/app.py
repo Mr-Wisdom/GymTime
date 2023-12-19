@@ -60,6 +60,13 @@ class CommentsById(Resource):
         db.session.delete(comment)
         db.session.commit()
         return make_response('deleted comment successfully', 204)
+    def patch(self, id):
+        comment = Comment.query.get(id)
+        params = request.json
+        for attr in params:
+            setattr(comment,attr, params[attr] )
+        db.session.commit()
+        return make_response(comment.to_dict(), 200)
 api.add_resource(CommentsById, '/api/v1/comments/<int:id>')
 
 class Favorites(Resource):

@@ -1,0 +1,18 @@
+.workouts {
+    display : flex;
+    flex-direction : row;
+    flex-wrap: wrap;
+    list-style-type: none;
+    justify-content: space-evenly;
+}
+.comment-actions {
+    display: flex;
+    margin-top: 8px;
+    cursor: pointer;
+}
+.comment-action:hover {
+    text-decoration: underline;
+}
+.comment {
+    display: flex;
+}

@@ -6,7 +6,7 @@ function Workouts() {
 
     return(
         <div>
-            <h2>All Exercises</h2>
+            <h2 id="workout-header">All Exercises</h2>
             <CardContainer workouts = {workouts}/>
         </div>
     )

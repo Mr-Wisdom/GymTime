@@ -2,6 +2,26 @@
     background-image: url("https://t3.ftcdn.net/jpg/06/59/62/56/360_F_659625696_6fl3fLxrdrDxB8udQNgcBKySen3Ij78t.jpg");
     background-position: center;
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: cover ;
     position: relative;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 10px;
+
+}
+#workout-header {
+    text-align: center;
+}
+#middle-box-header {
+    text-align: center;
+}
+.home-page-images {
+    display : flex;
+    flex-direction : row;
+    flex-wrap: wrap;
+    list-style-type: none;
+    justify-content: space-evenly;
+}
+#favorites-page-header {
+    text-align: center;
 }

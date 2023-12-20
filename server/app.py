@@ -71,9 +71,27 @@ api.add_resource(CommentsById, '/api/v1/comments/<int:id>')
 
 class Favorites(Resource):
     def get(self):
-        favorites = [favorite.to_dict() for favorite in Favorite.query.all()]
+        user= User.query.filter_by(id=session.get('user_id')).first()
+        favorites = [favorite.to_dict() for favorite in user.workouts_user_favorited]
         return make_response(favorites, 200)
+
+    def post(self):
+        params = request.json
+        new_favorite = Favorite(user_id = params['user_id'], workout_id = params['workout_id'])
+        db.session.add(new_favorite)
+        db.session.commit()
+        return make_response(new_favorite.to_dict(), 201)
 api.add_resource(Favorites, '/api/v1/favorites')
+
+class FavoritesById(Resource):
+    def delete(self, id):
+        favorite = Favorite.query.get(id)
+        if not favorite:
+            return make_response({'error': 'favorite not found'}, 404)
+        db.session.delete(favorite)
+        db.session.commit()
+        return make_response('deleted favorite successfully', 204)
+api.add_resource(FavoritesById, '/api/v1/favorites/<int:id>')
 
 
 

@@ -64,7 +64,7 @@ class Workout(db.Model, SerializerMixin):
 class Favorite(db.Model, SerializerMixin):
     __tablename__ = "favorites"
 
-    #SerializeRules
+    serialize_rules = ('-user', '-workout.favorites',)
 
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

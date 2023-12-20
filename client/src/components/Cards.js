@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
 import Comments from "./Comments";
 import { useOutletContext } from "react-router-dom";
 
@@ -29,10 +30,44 @@ const ExpandMore = styled((props) => {
 
 function Cards({image, workout_details, workout_difficulty, workout_type, workout_category, workout_likes, workout_name, workout_id}) {
     const [expanded, setExpanded] = useState(false);
+    const [favorited, setFavorited] = useState(false);
+    const [favorite, setFavorite] = useState(null)
+
 
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
+    const handleFavoriteClick = () => {
+        if (!favorited) {
+            fetch('favorites', {
+                method:'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    workout_id: workout_id
+                }),
+            }).then((favorite) => {
+                return favorite.json();
+            }).then(favorite => {
+                setFavorite(favorite)
+            })
+        }
+        else {
+            fetch(`favorites/${favorite.id}`, {
+                method: 'DELETE',
+                headers: {'Content-Type' : 'application/json'},
+                body: JSON.stringify({}),
+            }).then((resp) => {
+                if (resp.ok) {
+                    setFavorite(resp)
+                    
+                }
+            })
+        }
+        setFavorited(!favorited);
+    }
 
     const {user} = useOutletContext()
 
@@ -56,11 +91,9 @@ function Cards({image, workout_details, workout_difficulty, workout_type, workou
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <IconButton aria-label="like the workout">
-                        <FavoriteIcon/>
-                    </IconButton>
-                    <IconButton aria-label="add to favorites">
-                        <StarBorderIcon/>
+                    <IconButton aria-label="add to favorites" onClick={handleFavoriteClick}>
+                        {!favorited&&<StarBorderIcon/>}
+                        {favorited&&<StarIcon/>}
                     </IconButton>
                     <ExpandMore 
                      expand={expanded}

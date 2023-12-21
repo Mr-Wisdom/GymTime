@@ -7,7 +7,7 @@ from config import db, bcrypt
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
-    serialize_rules = ('-_password_hash',)
+    serialize_rules = ('-_password_hash', '-comments',)
 
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String)
@@ -41,6 +41,8 @@ class User(db.Model, SerializerMixin):
 
 class Workout(db.Model, SerializerMixin):
     __tablename__ = "workouts"
+
+    serialize_rules = ('-comments',)
 
     id = db.Column(db.Integer, primary_key = True)
     image = db.Column(db.String)

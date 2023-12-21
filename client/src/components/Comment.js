@@ -23,7 +23,7 @@ function Comment({comment, replies , currentUserId}) {
                 {replies.length > 0 &&(
                     <div className="replies">
                         {replies.map(reply => {
-                            <Comment comment={reply} key={reply.id} replies={[]}/>
+                            <Comment comment={reply} key={reply.id} replies={[]} currentUserId={currentUserId}/>
                         })}
                     </div>
                 )}

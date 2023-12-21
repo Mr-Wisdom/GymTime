@@ -43,7 +43,7 @@ class Comments(Resource):
         return make_response(comments, 200)
     def post(self):
         params = request.json
-        new_comment = Comment(comment= params['comment'], username= params['username'])
+        new_comment = Comment(comment= params['comment'], username= params['username'], workout_id=params['workout_id'], user_id=params['user_id'])
         if params.get("parentId"):
             new_comment.parentId= params['parentId']
         db.session.add(new_comment)
